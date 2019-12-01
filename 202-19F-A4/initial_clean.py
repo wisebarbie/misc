@@ -96,6 +96,18 @@ def stage_two(input_filename, output_filename):
     line_count = 0
     # do for all lines
     for line in input_lines:
+        # split line by delimiter into list
+        line_list = line.split('\t')
+        # make changes if there are more than 9 columns
+        if len(line_list) > 9:
+            temperature_list = line_list[7:-1]
+            temperature = temperature_list[0]
+            for i in range(1, len(temperature_list)):
+                if any(char.isdigit() for char in temperature_list[i]):
+                    temperature = temperature + '.' + temperature_list[i].replace(' ', '')
+                else:
+                    temperature = temperature + temperature_list[i].replace(' ', '')
+            line = '\t'.join(line_list[:7]) + '\t' + temperature + '\t' + line_list[-1]
         # write line to output_filename and increment line count
         output_file.write(line)
         line_count += 1 
