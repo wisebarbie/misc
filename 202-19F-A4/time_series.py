@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 def date_diff(date1, date2):
     '''
     (str, str) -> int
-    Take dates formatted in ISO format
+    Take dates formatted in ISO format (%Y-%m-%d)
     Return number of days apart the two dates are
-    Note that that date can be positive/negative:
+    Note that date can be positive/negative:
     - if the first date is earlier than the second date, the number should be positive;
     - if the second date is earlier than the first date, the number should be positive;
     >>> date_diff('2019-10-31', '2019-11-2') 
     2
     >>> date_diff('2020-1-1', '2020-1-30') 
     29
-    >>> date_diff('2020-1-1', '2019-11-30') 
-    -32
+    >>> date_diff('2018-10-31', '2000-11-2') 
+    -6572
     '''
     # convert date from string to integer given its specified ISO format 
     date1 = datetime.strptime(date1, '%Y-%m-%d')
