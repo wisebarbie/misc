@@ -87,9 +87,23 @@ def stage_two(input_filename, output_filename):
     >>> stage_two('stage1.tsv', 'stage2.tsv')
     4
     '''
-
-
-    return ''
+    # open relevant files
+    input_file = open(input_filename, 'r', encoding='utf-8')
+    output_file = open(output_filename, 'w', encoding='utf-8')
+    # store lines from input_filename as a list
+    input_lines = input_file.readlines()
+    # initialize variable to count number of lines written to output_filename
+    line_count = 0
+    # do for all lines
+    for line in input_lines:
+        # write line to output_filename and increment line count
+        output_file.write(line)
+        line_count += 1 
+    # close relevant files
+    input_file.close()
+    output_file.close()
+    # return line count
+    return line_count
 
 
 if __name__ == '__main__':
