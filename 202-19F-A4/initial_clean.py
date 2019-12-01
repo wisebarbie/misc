@@ -58,9 +58,15 @@ def stage_one(input_filename, output_filename):
         line = line.replace(which_delimiter(line), '\t')
         # change all text to be upper case
         line = line.upper()
+        # split line by delimiter into list to specifically target dates
+        line_list = line.split('\t')
         # change any / or . in the dates to hyphens (-) 
-        line = line.replace('.', '-')
-        line = line.replace('/', '-')
+        line_list[2] = line_list[2].replace('.', '-')
+        line_list[2] = line_list[2].replace('/', '-')
+        line_list[3] = line_list[3].replace('/', '-')
+        line_list[3] = line_list[3].replace('.', '-')
+        # join list by delimiter back into a string
+        line = '\t'.join(line_list)
         # write line to output_filename and increment line count
         output_file.write(line)
         line_count += 1 
