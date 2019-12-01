@@ -29,7 +29,7 @@ def date_diff(date1, date2):
 
 
 def get_age(date1, date2):
-    """
+    '''
     (str, str) -> int
     Take dates formatted in ISO format (%Y-%m-%d)
     Assume 1 year = 365.2425 days
@@ -41,9 +41,9 @@ def get_age(date1, date2):
     1
     >>> get_age('2018-10-31', '2000-11-2')
     -17
-    >>> get_age("2016-12-31", "2019-11-2") 
+    >>> get_age('2016-12-31', '2019-11-2') 
     2
-    """
+    '''
     # assume 1 year = 365.2425 days 
     one_year = 365.2425
     # compute number of years 
