@@ -14,10 +14,10 @@ def date_diff(date1, date2):
     - if the second date is earlier than the first date, the number should be positive;
     >>> date_diff('2019-10-31', '2019-11-2') 
     2
-    >>> date_diff('2020-5-3', '2020-6-30') 
-    58
-    >>> date_diff('2019-12-31', '2019-11-27') 
-    -34
+    >>> date_diff('2020-1-1', '2020-1-30') 
+    29
+    >>> date_diff('2020-1-1', '2019-11-30') 
+    -32
     '''
     # convert date from string to integer given its specified ISO format 
     date1 = datetime.strptime(date1, '%Y-%m-%d')
