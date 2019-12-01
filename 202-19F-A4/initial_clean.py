@@ -77,5 +77,20 @@ def stage_one(input_filename, output_filename):
     return line_count
 
 
+def stage_two(input_filename, output_filename):
+    '''
+    (str, str) -> int
+    Read input_filename and write to output_filename after ensuring the following: 
+    1. All lines should have 9 clean columns
+    2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
+    Return the number of lines written to output_filename
+    >>> stage_two('stage1.tsv', 'stage2.tsv')
+    4
+    '''
+
+
+    return ''
+
+
 if __name__ == '__main__':
     doctest.testmod()
