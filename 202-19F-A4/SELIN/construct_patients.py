@@ -80,6 +80,14 @@ class Patient:
             raise AssertionError('The patient has a different number/gender/postal code')
 
 def stage_four(input_filename, output_filename):
+    '''
+    >>> p = stage_four('stage3.tsv', 'stage4.tsv')
+    >>> len(p)
+    1716
+    >>> print(str(p[0]))
+    0 42 F H3Z 0 I 12 40.0;39.13;39.45;39.5;39.36;39.2;39.0;39.04;38.82;37.7
+
+    '''
     # open input files
     input_file = open(input_filename, 'r', encoding='utf-8')
     output_file = open(output_filename, 'w', encoding='utf-8')
