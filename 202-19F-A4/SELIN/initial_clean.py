@@ -116,14 +116,16 @@ def stage_two(input_filename, output_filename):
             new_lst = line_lst[:5]
             new_lst.append(line_lst[5]+line_lst[6])
             new_lst.extend(line_lst[7:])
-            line_lst = new_lst
+        else:
+            new_lst = line_lst
 
         # make changes if there are more than 9 columns
-        if len(line_lst) > 9:
-            temperature_lst = line_lst[7:-1]
+        if len(new_lst) > 9:
+            
+            temperature_lst = new_lst[7:-1]
             temperature = get_columns_straight(temperature_lst)
         
-            line = '\t'.join(line_lst[:7]) + '\t' + temperature + '\t' + line_lst[-1]
+            line = '\t'.join(new_lst[:7]) + '\t' + temperature + '\t' + new_lst[-1]
         # write line to output_filename and increment line count
         output_file.write(line)
         line_count += 1 

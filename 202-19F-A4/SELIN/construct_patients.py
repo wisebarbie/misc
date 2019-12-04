@@ -1,6 +1,7 @@
 import doctest
 import numpy as np
 import matplotlib.pyplot as plt
+
 #helper 
     #helper function to clean up status
 def clean_status(token):
@@ -11,25 +12,39 @@ def clean_status(token):
 def clean_gender(token):
     m = ['M', 'H', 'B']
     f = ['F', 'G', 'W']
-    if any(char in m for char in token):
+    if any(char in m for char in token) and not any(char in f for char in token):
         return m[0]
     elif any(char in f for char in token):
         return f[0]
     else:
         return 'X'
+def validate_temp(token):
+    didNumberStart =  False
+    decimalPointCount= 0
+    cleanTemp = []
+    for char in token:
+        if char.isdigit():
+            didNumberStart=True
+            cleanTemp.append(char)
+        if char == '.' and didNumberStart and decimalPointCount == 0:
+            decimalPointCount += 1
+            cleanTemp.append(char)
+    return ''.join(cleanTemp)
 def toString(token, l):
     l.append(str(token))
     
 class Patient:
     '''
+    new class defined
         >>> p = Patient('0', '0', '42', 'Woman', 'H3Z2B5', 'I', '102.2', '12')
-        >>> print(str(p))
-        0 42 F H3Z 0 I 12 39.0
+        >>> (p.num == 0) and (p.age==42) and (p.sex_gender == 'F') and (p.day_diagnosed == 0) and (p.postal == 'H3Z') and (p.state == 'I') and (p.temps == [39.0]) and (p.days_symptomatic==12) 
+        True
         >>> p = Patient('0', '0', '42', 'Woman', 'H3Z2B5', 'I', '102.2', '12')
         >>> p1 = Patient('0', '1', '42', 'F', 'H3Z', 'I', '40,0 C', '13')
         >>> p.update(p1)
-        >>> print(str(p))
-        0 42 F H3Z 0 I 13 39.0;40.0
+        >>> (p.num == 0) and (p.age==42) and (p.sex_gender == 'F') and (p.day_diagnosed == 0) and (p.postal == 'H3Z') and (p.state == 'I') and (p.temps == [39.0, 40.0]) and (p.days_symptomatic==13) 
+        True
+        
     '''
     #constructor
     def __init__(self, num, d_d, age, s_g, postal, state, temp, d_s):
@@ -46,10 +61,10 @@ class Patient:
         #self.state: the state of the patient. Assume the input will be one of I, R or D.
         self.state = clean_status(state)
         self.temps = []
-        if not any(char.isdigit() for char in temp):
+        if not any(char.isdigit() for char in str(temp)):
             temperature = 0
         else:
-            temperature = float(temp.replace(',', '.').replace(' ','').replace('C', '').replace('F',''))
+            temperature = float(validate_temp(str(temp).replace(',', '.').replace(' ','').replace('C', '').replace('F','').replace('°','')))
         if temperature > 45 :
             temperature = round((5.0/9)*(temperature-32), 2)
         self.temps.append(temperature)
@@ -83,10 +98,9 @@ def stage_four(input_filename, output_filename):
     '''
     >>> p = stage_four('stage3.tsv', 'stage4.tsv')
     >>> len(p)
-    1716
-    >>> print(str(p[0]))
-    0 42 F H3Z 0 I 12 40.0;39.13;39.45;39.5;39.36;39.2;39.0;39.04;38.82;37.7
-
+    3
+    >>> p[0].equals(Patient(0,1,42,'F','H3Z','I',39.13,4))
+    True
     '''
     # open input files
     input_file = open(input_filename, 'r', encoding='utf-8')
@@ -97,12 +111,65 @@ def stage_four(input_filename, output_filename):
     for line in input_lines:
         ln_lst = line.split('\t')
         p = Patient(ln_lst[1], ln_lst[2], ln_lst[3], ln_lst[4], ln_lst[5], ln_lst[6], ln_lst[7], ln_lst[8])
-        d[int(ln_lst[1])] = p
-        output_file.write(str(p))
+        if ln_lst[1] not in d.keys():
+            d[int(ln_lst[1])] = p
+            
+        else:
+            d[int(ln_lst[1])].update(p)
+        output_file.write(str(p)+'\n')
     # close relevant files
     input_file.close()
     output_file.close()
     return d
 
+def fatality_by_age(p_d):
+    '''
+    shows age vs. fatality_by_age
+    p = stage_four('stage3.tsv', 'stage4.tsv')
+    fatality_by_age(p)
+    
+    '''
+    #helper methods
+    def round_to_5(num):
+        return round(num/5.0) * 5
+    def sort_by_age(tuple):
+        return tuple[0]
+    #initialize a (int ,(str, int) dict) dict by dictionary comprehension
+    #inspired from python 3 documentation attached in the syllabus: 
+    #https://docs.python.org/3/search.html?q=dictionary+comprehension&check_keywords=yes&area=default
+    #the key for the outermost dictionary would be the age
+    #the subdictionary will have ('D':dead counts), ('R': recover counts)
+    
+    dead_vs_recover_by_age = {5*i:{'D':0, 'R':0} for i in np.arange(20)}
+    dead_or_recovered = {x:x for x in ['D', 'R']} 
+    dead_or_recovered['I'] = None
+    
+    for patient in p_d.values():
+        state_verified = dead_or_recovered[patient.state]
+        if state_verified:
+            dead_vs_recover_by_age[round_to_5(patient.age)][state_verified] += 1.0
+    age_probs = []
+    for age, counts in dead_vs_recover_by_age.items():
+        if counts['D'] + counts['R'] > 0:
+            prob = counts['D'] / (counts['D'] + counts['R'])
+        else:
+            prob = 0
+        age_probs.append((age, prob))
+
+    age_probs.sort(key=sort_by_age) 
+    fig, ax = plt.subplots()
+    ax.plot([age for age, prob in age_probs], [prob for age, prob in age_probs])
+    ax.set(xlabel = 'Age', ylabel = 'Deaths / (Deaths+Recoveries)',title = 'Probability of death vs. Age by Selin Cataltepe')
+    plt.ylim((0, 1.2))
+    plt.savefig('fatality_by_age.png')
+
+    return [prob for age, prob in age_probs]
+            
+        
+        
+        
+    
+    
+    
     
     

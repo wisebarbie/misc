@@ -3,7 +3,6 @@ from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 def date_diff(date1, date2):
     '''
     (str, str) -> int
@@ -91,8 +90,14 @@ def stage_three(input_filename, output_filename):
     days_status_tuples = []
     #dictionary to return
       #another helper function to process lines
-    def process_line(new_line):
+    def process_line(new_line, days_spanned, days_status_tuples):
+        
         ln_lst = new_line.split('\t')
+        if any(char.isdigit() for char in ln_lst[6]) and len(ln_lst) > 9:
+            new_lst = ln_lst[:5]
+            new_lst.append(ln_lst[5]+ln_lst[6])
+            new_lst.extend(ln_lst[7:])
+            ln_lst = new_lst
         #take the date_diff to count the days since the index date
         ln_lst[2] = str(date_diff(index_date, ln_lst[2]))
           #take get_age to calculate the age
@@ -105,14 +110,17 @@ def stage_three(input_filename, output_filename):
         output_file.write('\t'.join(ln_lst))
         
     for line in input_lines:
-        process_line(line)
+        process_line(line, days_spanned, days_status_tuples)
     # close relevant files
     input_file.close()
     output_file.close()
     #now let's append what was needed in a dictionary
-    days_status =  {int(day_spanned):{status:0 for status in possible_status.values()} for day_spanned in np.unique(days_spanned)}
+    #dictionary comprehension - referred to python 3 documentation attached to the syllabus
+    #https://docs.python.org/3/search.html?q=dictionary+comprehension&check_keywords=yes&area=default
+    days_status =  {int(day_spanned):{status:0 for status in possible_status.values()} for day_spanned in np.unique(days_spanned) if days_spanned}
     for (days, status) in days_status_tuples:
-        days_status[days][status] += 1
+        if (status in possible_status.values()) and (days is not None):
+            days_status[days][status] += 1
     return days_status
         
 def plot_time_series(d):
@@ -124,16 +132,21 @@ def plot_time_series(d):
     '''
     def comprehend_with_order(sd):
         return [sd['I'], sd['R'], sd['D']]
-        
+    
+    #list comprehension - referred to the addenda in the textbook mentioned in the syllabus
+    #and python 3 documentation
+    #https://docs.python.org/3/search.html?q=dictionary+comprehension&check_keywords=yes&area=default
     result =  [comprehend_with_order(subdict) for subdict in d.values()]
     
-    plt.plot(np.arange(len(result)), [sublist[0] for sublist in result])
-    plt.plot(np.arange(len(result)), [sublist[1] for sublist in result])
-    plt.plot(np.arange(len(result)),[sublist[2] for sublist in result])
-    plt.xlabel = 'Days into Pandemic'
-    plt.ylabel = 'Number of People'
-    plt.legend(['Infected', 'Recovered', 'Dead'])
-    plt.savefig('time_series.png')
+    fig, ax = plt.subplots()
+   
+    ax.plot(np.arange(len(result)), [sublist[0] for sublist in result])
+    ax.plot(np.arange(len(result)), [sublist[1] for sublist in result])
+    ax.plot(np.arange(len(result)),[sublist[2] for sublist in result])
+    
+    plt.legend(('Infected', 'Recovered', 'Dead'))
+    ax.set(title='Time series of early pandemic', xlabel = "Days into Pandemic", ylabel = "Number of People" )
+    plt.savefig("time_series.png")
 
     return result
 
