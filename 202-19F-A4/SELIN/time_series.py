@@ -20,12 +20,9 @@ def date_diff(date1, date2):
     -6572
     '''
     # convert date from string to integer given its specified ISO format 
-    date1 = datetime.strptime(date1, '%Y-%m-%d')
-    date2 = datetime.strptime(date2, '%Y-%m-%d')
     # compute difference between dates
-    time_delta = date2 - date1
     # return difference as number of days
-    return time_delta.days
+    return (datetime.strptime(date2, '%Y-%m-%d') - datetime.strptime(date1, '%Y-%m-%d')).days
 
 
 def get_age(date1, date2):
@@ -53,12 +50,9 @@ def get_age(date1, date2):
 
 def stage_three(input_filename, output_filename):
     '''
-    (str, str) -> dict(dict(str:int))
+    (str, str) -> ( (str, int) dict ) dict
 
-    First, determine the index date: the fi
-rst date in the fi
-rst line of the fi
-le (2022-11-28 in our
+    First, determine the index date: the first date in the first line of the file (2022-11-28 in our
     running example)
     The changes to make to the data:
         1. Replace the date of each record with the date_diff of that date and the index date
@@ -74,12 +68,14 @@ le (2022-11-28 in our
     '''
     #Store a list of possible status: I - infected; R - recovered; D- dead 
     
-    possible_status = {'I':'I', 'M':'D', 'R':'R'}
+    possible_status = {'I':'I', 'M':'D', 'R':'R', 'D':'D'}
     #helper function to clean up status
     def clean_status(token):
         for status in possible_status.keys():
             if status in token.upper():
                 return possible_status[status]
+  
+        
         
     # open input files
     input_file = open(input_filename, 'r', encoding='utf-8')
@@ -90,41 +86,57 @@ le (2022-11-28 in our
     index_date = input_lines[0].split('\t')[2]
     #store possible days passed since the index; 
     # will filter duplicates later
-    days =  []
+    days_spanned =  []
     #list of tuples to keep track of (days since the index date, status)
     days_status_tuples = []
     #dictionary to return
-    
-    for line in input_lines:
-        ln_lst = line.split('\t')
-        #get date_diagnosed
-        date_diagnosed = ln_lst[2]
+      #another helper function to process lines
+    def process_line(new_line):
+        ln_lst = new_line.split('\t')
         #take the date_diff to count the days since the index date
-        ln_lst[2] = str(date_diff(index_date, date_diagnosed))
-        
-        days.append(ln_lst[2])
-        #get date of birth
-        birthdate =  ln_lst[3]
-        #take get_age to calculate the age
-        ln_lst[3] = str(get_age(birth_date, index_date))
-        #clean up the status now
-        status_raw = ln_lst[6]
-        ln_lst[6] = str(clean_status(status_raw))
+        ln_lst[2] = str(date_diff(index_date, ln_lst[2]))
+          #take get_age to calculate the age
+        ln_lst[3] = str(get_age(ln_lst[3], index_date))
+          #clean up the status now
+        ln_lst[6] = str(clean_status(ln_lst[6]))
+        days_spanned.append(ln_lst[2])
         days_status_tuples.append((int(ln_lst[2]), ln_lst[6]))
-        line_modified = '\t'.join(ln_lst)
         # write line to output_filename and increment line count
-        output_file.write(line_modified)
-    
+        output_file.write('\t'.join(ln_lst))
+        
+    for line in input_lines:
+        process_line(line)
+    # close relevant files
+    input_file.close()
+    output_file.close()
     #now let's append what was needed in a dictionary
-    days_status = {} 
-    for day in np.unique(days):
-        days_status[int(day)] = {}
-        for status in possible_status.values():
-            days_status[int(day)][status] = 0
-            
+    days_status =  {int(day_spanned):{status:0 for status in possible_status.values()} for day_spanned in np.unique(days_spanned)}
     for (days, status) in days_status_tuples:
         days_status[days][status] += 1
     return days_status
+        
+def plot_time_series(d):
+    '''
+    d : ( (str, int) dict ) dict -> (int list) list
+    >>> d = stage_three('stage2.tsv', 'stage3.tsv')
+    >>> plot_time_series(d)
+    [[1, 0, 0], [2, 0, 1]]
+    '''
+    def comprehend_with_order(sd):
+        return [sd['I'], sd['R'], sd['D']]
+        
+    result =  [comprehend_with_order(subdict) for subdict in d.values()]
+    
+    plt.plot(np.arange(len(result)), [sublist[0] for sublist in result])
+    plt.plot(np.arange(len(result)), [sublist[1] for sublist in result])
+    plt.plot(np.arange(len(result)),[sublist[2] for sublist in result])
+    plt.xlabel = 'Days into Pandemic'
+    plt.ylabel = 'Number of People'
+    plt.legend(['Infected', 'Recovered', 'Dead'])
+    plt.savefig('time_series.png')
+
+    return result
+
 
 if __name__ == '__main__':
     doctest.testmod()
