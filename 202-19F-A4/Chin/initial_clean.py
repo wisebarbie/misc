@@ -36,12 +36,14 @@ def which_delimiter(string):
     # initialize variables to note most common delimiter and its count 
     most_common = None
     max_count = 0
+
     # check for all acceptable delimiters
     for delimiter in DELIMITERS:
         # update most common delimiter and its count if necessary
         if string.count(delimiter) > max_count:
             most_common = delimiter
             max_count = string.count(delimiter)
+
     # return most common delimiter if this exists
     if most_common:
         return most_common
