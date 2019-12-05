@@ -66,7 +66,7 @@ def stage_one(input_filename, output_filename):
     '''
 
     with open(output_filename, 'w', encoding='utf-8') as output_file:
-        with open(input_filename, 'r', encoding='utf-8') as input_file:
+        with open(input_filename, encoding='utf-8') as input_file:
 
             # store lines from input file
             input_text = input_file.readlines()
@@ -115,7 +115,7 @@ def stage_two(input_filename, output_filename):
     '''
 
     with open(output_filename, 'w', encoding='utf-8') as output_file:
-        with open(input_filename, 'r', encoding='utf-8') as input_file:
+        with open(input_filename, encoding='utf-8') as input_file:
 
             # store lines from input file
             input_text = input_file.readlines()
