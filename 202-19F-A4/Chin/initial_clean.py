@@ -1,6 +1,6 @@
 # COMP 202 A4
-# Name: Chin Yiap Ong
-# Student ID: 260823566
+# NAME: Chin Yiap Ong
+# ID: 260823566
 
 
 import doctest
@@ -38,6 +38,7 @@ def which_delimiter(string):
     # count frequency of all delimiters in input string
     for delimiter in delimiters:
         count = string.count(delimiter)
+        
         # store most frequent delimiter and its count
         if count > max_count:
             max_delimiter = delimiter
@@ -60,38 +61,42 @@ def stage_one(input_filename, output_filename):
     3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
 
-    >>> stage_one('example-stage1.txt', 'example-stage1.tsv')
+    >>> stage_one('example_0.txt', 'example_1.tsv')
     4
     '''
 
     with open(output_filename, 'w', encoding='utf-8') as output_file:
         with open(input_filename, 'r', encoding='utf-8') as input_file:
 
-            # store lines from input file as a list
-            input_lines = input_file.readlines()
+            # store lines from input file
+            input_text = input_file.readlines()
 
-            # initialize variable to count number of lines written to output_filename
+            # initialize variable to count number of lines written to output file
             line_count = 0
 
-            # do for all lines
-            for line in input_lines:
-                # change the most common delimiter to tab 
-                line = line.replace(which_delimiter(line), '\t')
+            for line in input_text:
+
+                # change delimiter to tab, text to upper case, 
+                line = line.replace(which_delimiter(line), '\t').upper()
+
                 # change all text to be upper case
-                line = line.upper()
+                line = line
+
                 # split line by delimiter into list to specifically target dates
                 line_list = line.split('\t')
-                # change any / or . in the dates to hyphens (-) 
-                line_list[2] = line_list[2].replace('.', '-')
-                line_list[2] = line_list[2].replace('/', '-')
-                line_list[3] = line_list[3].replace('/', '-')
-                line_list[3] = line_list[3].replace('.', '-')
+
+                # change any / or . in the dates to hyphens 
+                for i in range(2, 4):
+                    line_list[i] = line_list[i].replace('.', '-').replace('/', '-')
+
                 # join list by delimiter back into a string
                 line = '\t'.join(line_list)
+
                 # write line to output file
                 output_file.write(line)
+
                 # increment line count
-                line_count += 1 
+                line_count += 1
 
     return line_count
 
@@ -105,23 +110,24 @@ def stage_two(input_filename, output_filename):
     2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
     Return the number of lines written to output_filename
     
-    >>> stage_two('example-stage1.tsv', 'example-stage2.tsv')
+    >>> stage_two('example_1.tsv', 'example_2.tsv')
     4
     '''
 
     with open(output_filename, 'w', encoding='utf-8') as output_file:
         with open(input_filename, 'r', encoding='utf-8') as input_file:
 
-            # store lines from input file as a list
-            input_lines = input_file.readlines()
+            # store lines from input file
+            input_text = input_file.readlines()
 
-            # initialize variable to count number of lines written to output_filename
+            # initialize variable to count number of lines written to output file
             line_count = 0
 
-            # do for all lines
-            for line in input_lines:
+            for line in input_text:
+
                 # split line by delimiter into list
                 line_list = line.split('\t')
+
                 # make changes if there are more than 9 columns
                 if len(line_list) > 9:
                     temperature_list = line_list[7:-1]
@@ -132,8 +138,10 @@ def stage_two(input_filename, output_filename):
                         else:
                             temperature = temperature + temperature_list[i].replace(' ', '')
                     line = '\t'.join(line_list[:7]) + '\t' + temperature + '\t' + line_list[-1]
+
                 # write line to output file
                 output_file.write(line)
+
                 # increment line count
                 line_count += 1 
 
