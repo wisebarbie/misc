@@ -58,8 +58,8 @@ def stage_three(input_filename, output_filename):
         2. Replace the date of birth with age at the time of the index date
         3. Replace the status with one of I, R and D. (Representing Infected, Recovered, and Dead;
         the French words are infecté(e), récupéré(e) and mort(e).)
-    >>> stage_three('stage2.tsv', 'stage3.tsv')
-    {0: {'I': 1, 'D': 0, 'R': 0}, 1: {'I': 2, 'D': 1, 'R': 0}}
+    >>> stage_three('260823521_2.tsv', '260823521_3.tsv')
+    {0: {'I': 1, 'D': 0, 'R': 0}, 1: {'I': 3, 'D': 0, 'R': 0}, 10: {'I': 576, 'D': 69, 'R': 1}, 2: {'I': 7, 'D': 0, 'R': 0}, 3: {'I': 14, 'D': 1, 'R': 0}, 4: {'I': 30, 'D': 2, 'R': 0}, 5: {'I': 50, 'D': 17, 'R': 1}, 6: {'I': 118, 'D': 13, 'R': 0}, 7: {'I': 217, 'D': 74, 'R': 0}, 8: {'I': 430, 'D': 157, 'R': 0}, 9: {'I': 857, 'D': 361, 'R': 1}}
     
     Return: a dictionary. The keys are each day of the pandemic (integer). The values are a
     dictionary, with how many people are in each state on that day. Example:
@@ -126,9 +126,9 @@ def stage_three(input_filename, output_filename):
 def plot_time_series(d):
     '''
     d : ( (str, int) dict ) dict -> (int list) list
-    >>> d = stage_three('stage2.tsv', 'stage3.tsv')
+    >>> d = stage_three('260823521_2.tsv', '260823521_3.tsv')
     >>> plot_time_series(d)
-    [[1, 0, 0], [2, 0, 1]]
+    [[1, 0, 0], [3, 0, 0], [576, 1, 69], [7, 0, 0], [14, 0, 1], [30, 0, 2], [50, 1, 17], [118, 0, 13], [217, 0, 74], [430, 0, 157], [857, 1, 361]]
     '''
     def comprehend_with_order(sd):
         return [sd['I'], sd['R'], sd['D']]

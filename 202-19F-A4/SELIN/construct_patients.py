@@ -96,10 +96,10 @@ class Patient:
 
 def stage_four(input_filename, output_filename):
     '''
-    >>> p = stage_four('stage3.tsv', 'stage4.tsv')
+    >>> p = stage_four('260823521_3.tsv', '260823521_4.tsv')
     >>> len(p)
-    3
-    >>> p[0].equals(Patient(0,1,42,'F','H3Z','I',39.13,4))
+    1912
+    >>> p[0].equals(Patient(0, 5, 23, 'M', 'H4C', 'R', 37.25, 10))
     True
     '''
     # open input files
@@ -125,8 +125,9 @@ def stage_four(input_filename, output_filename):
 def fatality_by_age(p_d):
     '''
     shows age vs. fatality_by_age
-    p = stage_four('stage3.tsv', 'stage4.tsv')
-    fatality_by_age(p)
+    >>> p = stage_four('260823521_3.tsv', '260823521_4.tsv')
+    >>> fatality_by_age(p)
+    [1.0, 1.0, 1.0, 1.0, 0.9782608695652174, 0.9615384615384616, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     
     '''
     #helper methods
@@ -165,8 +166,8 @@ def fatality_by_age(p_d):
 
     return [prob for age, prob in age_probs]
             
-        
-        
+if __name__ == '__main__':
+    doctest.testmod()
         
     
     

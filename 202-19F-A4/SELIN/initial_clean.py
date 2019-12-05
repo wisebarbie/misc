@@ -43,8 +43,8 @@ def stage_one(input_filename, output_filename):
     2. Change all text to be upper case
     3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
-    >>> stage_one('stage1.txt', 'stage1.tsv')
-    4
+    >>> stage_one('260823521.txt', '260823521.tsv')
+    3000
     '''
     #helper
     def replace_to_hyphen(line):
@@ -86,8 +86,8 @@ def stage_two(input_filename, output_filename):
     1. All lines should have 9 clean columns
     2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
     Return the number of lines written to output_filename
-    >>> stage_two('stage1.tsv', 'stage2.tsv')
-    4
+    >>> stage_two('260823521.tsv', '260823521_2.tsv')
+    3000
     '''
     #helper function
     def get_columns_straight(t_lst):
