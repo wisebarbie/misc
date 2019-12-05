@@ -121,21 +121,19 @@ def plot_time_series(day_dict):
     '''
     # initialize variables
     day_list = []
-    days = []
     I = []
     R = []
     D = []
     # do for every (key, value) pair in dictionary
-    for day, status_dict in sorted(day_dict.items()):
-        days.append(day)
+    for _, status_dict in sorted(day_dict.items()):
         I.append(status_dict['I'])
         R.append(status_dict['R'])
         D.append(status_dict['D'])
         day_list.append([status_dict['I'], status_dict['R'], status_dict['D']])
     # plot points per status
-    plt.plot(days, I)
-    plt.plot(days, R)
-    plt.plot(days, D)
+    plt.plot(range(0,len(day_list)), I)
+    plt.plot(range(0,len(day_list)), R)
+    plt.plot(range(0,len(day_list)), D)
     # add title, axis labels, legend
     plt.title('Time series of early pandemic, by Kayra Aker')
     plt.xlabel('Days into Pandemic')
