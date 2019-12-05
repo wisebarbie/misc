@@ -120,18 +120,18 @@ def plot_time_series(day_dict):
     [[1, 0, 0], [2, 0, 1]]
     '''
     # initialize variables
-    result = []
+    day_list = []
     days = []
     I = []
     R = []
     D = []
-    # for every 
+    # do for every (key, value) pair in dictionary
     for day, status_dict in sorted(day_dict.items()):
         days.append(day)
         I.append(status_dict['I'])
         R.append(status_dict['R'])
         D.append(status_dict['D'])
-        result.append([status_dict['I'], status_dict['R'], status_dict['D']])
+        day_list.append([status_dict['I'], status_dict['R'], status_dict['D']])
     # plot points per status
     plt.plot(days, I)
     plt.plot(days, R)
@@ -143,8 +143,8 @@ def plot_time_series(day_dict):
     plt.legend(['Infected', 'Recovered', 'Dead'])
     # save figure
     plt.savefig('time_series.png')
-    # return...
-    return result
+    # return list in desired format
+    return day_list
 
 
 if __name__ == '__main__':
