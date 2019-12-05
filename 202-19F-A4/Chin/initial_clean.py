@@ -6,27 +6,38 @@
 import doctest
 
 
+DELIMITERS = [' ', ',', '\t']
+
+
 def which_delimiter(string):
     '''
-    (str) -> str
-    Return the most commonly used delimiter (space/comma/tab) in the input string
+    (str)-> str
+
+    Return the most commonly used delimiter (i.e. space, comma, tab) in the input string 
+
     >>> which_delimiter('0 1 2,3')
     ' '
-    >>> which_delimiter('0,1,2,3')
-    ','
-    >>> which_delimiter('0\\t1\\t2\\t3')
+
+    >>> which_delimiter('4\\t5\\t6\\t7')
     '\\t'
+
+    >>> which_delimiter('8,9,10,11')
+    ','
+
+    >>> which_delimiter('12-13-14-15')
+    Traceback (most recent call last):
+    AssertionError: Does not contain at least one delimiter (i.e. space, comma, tab)
+    
     >>> which_delimiter('0123')
     Traceback (most recent call last):
-    AssertionError: Must contain at least one delimiter (space/comma/tab)
+    AssertionError: Does not contain at least one delimiter (i.e. space, comma, tab)
     '''
-    # note acceptable delimiters (space/comma/tab)
-    delimiters = [' ', ',', '\t']
+
     # initialize variables to note most common delimiter and its count 
     most_common = None
     max_count = 0
     # check for all acceptable delimiters
-    for delimiter in delimiters:
+    for delimiter in DELIMITERS:
         # update most common delimiter and its count if necessary
         if string.count(delimiter) > max_count:
             most_common = delimiter
@@ -34,21 +45,24 @@ def which_delimiter(string):
     # return most common delimiter if this exists
     if most_common:
         return most_common
-    # otherwise raise error
-    raise AssertionError('Must contain at least one delimiter (space/comma/tab)')
+    else:
+        raise AssertionError('Does not contain at least one delimiter (i.e. space, comma, tab)')
 
 
 def stage_one(input_filename, output_filename):
     '''
     (str, str) -> int
+
     Read input_filename and write to output_filename after making the following changes: 
     1. Change the most common delimiter to tab (if it is not already tab-delimited) 
     2. Change all text to be upper case
     3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
-    >>> stage_one('example.txt', 'stage1.tsv')
+
+    >>> stage_one('stage1-example.txt', 'stage1.tsv')
     4
     '''
+
     # open relevant files
     input_file = open(input_filename, 'r', encoding='utf-8')
     output_file = open(output_filename, 'w', encoding='utf-8')
@@ -77,17 +91,19 @@ def stage_one(input_filename, output_filename):
     # close relevant files
     input_file.close()
     output_file.close()
-    # return line count
+
     return line_count
 
 
 def stage_two(input_filename, output_filename):
     '''
     (str, str) -> int
+    
     Read input_filename and write to output_filename after ensuring the following: 
     1. All lines should have 9 clean columns
     2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
     Return the number of lines written to output_filename
+    
     >>> stage_two('stage1.tsv', 'stage2.tsv')
     4
     '''
@@ -118,9 +134,10 @@ def stage_two(input_filename, output_filename):
     # close relevant files
     input_file.close()
     output_file.close()
-    # return line count
+
     return line_count
 
 
 if __name__ == '__main__':
+
     doctest.testmod()
