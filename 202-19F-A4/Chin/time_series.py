@@ -4,7 +4,7 @@
 
 
 import doctest
-from datetime import datetime
+import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -26,8 +26,8 @@ def date_diff(date1, date2):
     '''
 
     # convert date from string to integer given its specified ISO format 
-    date1 = datetime.strptime(date1, '%Y-%m-%d')
-    date2 = datetime.strptime(date2, '%Y-%m-%d')
+    date1 = datetime.datetime.strptime(date1, '%Y-%m-%d')
+    date2 = datetime.datetime.strptime(date2, '%Y-%m-%d')
 
     # compute difference between dates and convert to days
     days = (date2 - date1).days
