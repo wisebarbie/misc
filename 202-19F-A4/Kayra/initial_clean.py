@@ -2,21 +2,23 @@
 # Name: Kayra Aker
 # Student ID: 260837168
 
+
 import doctest
+
 
 def which_delimiter(string):
     '''
-    (str)->str
-    Return the most commonly used delimiter (space, comma, tab) in the input string
+    (str) -> str
+    Return the most commonly used delimiter (space/comma/tab) in the input string
     >>> which_delimiter('0 1 2,3')
     ' '
-    >>> which_delimiter('4 5,6,7')
+    >>> which_delimiter('0,1,2,3')
     ','
-    >>> which_delimiter('8\\t9\\t10\\t 11')
+    >>> which_delimiter('0\\t1\\t2\\t3')
     '\\t'
-    >>> which_delimiter('1234')
+    >>> which_delimiter('0123')
     Traceback (most recent call last):
-    AssertionError: Must contain at least one delimiter (space, comma, tab)
+    AssertionError: Must contain at least one delimiter (space/comma/tab)
     '''
     # note acceptable delimiters (space/comma/tab)
     delimiters = [' ', ',', '\t']
@@ -33,17 +35,18 @@ def which_delimiter(string):
     if most_common:
         return most_common
     # otherwise raise error
-    raise AssertionError('Must contain at least one delimiter (space, comma, tab)')
+    raise AssertionError('Must contain at least one delimiter (space/comma/tab)')
+
 
 def stage_one(input_filename, output_filename):
     '''
-    (str,str)->int
+    (str, str) -> int
     Read input_filename and write to output_filename after making the following changes: 
     1. Change the most common delimiter to tab (if it is not already tab-delimited) 
     2. Change all text to be upper case
     3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
-    >>> stage_one('stage1.txt', 'stage1.tsv')
+    >>> stage_one('example.txt', 'stage1.tsv')
     4
     '''
     # open relevant files
@@ -77,9 +80,10 @@ def stage_one(input_filename, output_filename):
     # return line count
     return line_count
 
+
 def stage_two(input_filename, output_filename):
     '''
-    (str,str)->int
+    (str, str) -> int
     Read input_filename and write to output_filename after ensuring the following: 
     1. All lines should have 9 clean columns
     2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
@@ -116,6 +120,7 @@ def stage_two(input_filename, output_filename):
     output_file.close()
     # return line count
     return line_count
+
 
 if __name__ == '__main__':
     doctest.testmod()

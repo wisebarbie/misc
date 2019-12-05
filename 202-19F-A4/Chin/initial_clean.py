@@ -8,7 +8,7 @@ import doctest
 
 def which_delimiter(string):
     '''
-    (str)-> str
+    (str) -> str
 
     Return the most commonly used delimiter (i.e. space, comma, tab) in the input string 
 
@@ -60,7 +60,7 @@ def stage_one(input_filename, output_filename):
     3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
 
-    >>> stage_one('stage1-example.txt', 'stage1.tsv')
+    >>> stage_one('example-stage1.txt', 'example-stage1.tsv')
     4
     '''
 
@@ -105,7 +105,7 @@ def stage_two(input_filename, output_filename):
     2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
     Return the number of lines written to output_filename
     
-    >>> stage_two('stage1.tsv', 'stage2.tsv')
+    >>> stage_two('example-stage1.tsv', 'example-stage2.tsv')
     4
     '''
 
