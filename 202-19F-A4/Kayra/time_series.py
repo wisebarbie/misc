@@ -83,7 +83,7 @@ def stage_three(input_filename, output_filename):
     # store lines from input_filename as a list
     input_lines = input_file.readlines()
     # initialize dictionary
-    days_dict = {}
+    day_dict = {}
     # note index date
     index_date = input_lines[0].split('\t')[2]
     # do for all lines
@@ -99,15 +99,52 @@ def stage_three(input_filename, output_filename):
         if line_list[6] == 'M':
             line_list[6] = 'D'
         # update dictionary
-        if int(line_list[2]) not in days_dict.keys():
-            days_dict[int(line_list[2])] = {'I': 0, 'D': 0, 'R': 0}
-        days_dict[int(line_list[2])][line_list[6]] += 1
+        if int(line_list[2]) not in day_dict.keys():
+            day_dict[int(line_list[2])] = {'I': 0, 'D': 0, 'R': 0}
+        day_dict[int(line_list[2])][line_list[6]] += 1
         # join list by delimiter back into a string
         line = '\t'.join(line_list)
         # write line to output_filename
         output_file.write(line)
     # return dictionary in desired format
-    return days_dict
+    return day_dict
+
+
+def plot_time_series(day_dict):
+    '''
+    dict -> list
+    Return a list of lists, where each sublist represents each day of the pandemic 
+    i.e. [how many people infected, how many people recovered, how many people dead]
+    >>> day_dict = stage_three('stage2.tsv', 'stage3.tsv')
+    >>> plot_time_series(day_dict)
+    [[1, 0, 0], [2, 0, 1]]
+    '''
+    # initialize variables
+    result = []
+    days = []
+    I = []
+    R = []
+    D = []
+    # for every 
+    for day, status_dict in sorted(day_dict.items()):
+        days.append(day)
+        I.append(status_dict['I'])
+        R.append(status_dict['R'])
+        D.append(status_dict['D'])
+        result.append([status_dict['I'], status_dict['R'], status_dict['D']])
+    # plot points per status
+    plt.plot(days, I)
+    plt.plot(days, R)
+    plt.plot(days, D)
+    # add title, axis labels, legend
+    plt.title('Time series of early pandemic, by Kayra Aker')
+    plt.xlabel('Days into Pandemic')
+    plt.ylabel('Number of People')
+    plt.legend(['Infected', 'Recovered', 'Dead'])
+    # save figure
+    plt.savefig('time_series.png')
+    # return...
+    return result
 
 
 if __name__ == '__main__':
