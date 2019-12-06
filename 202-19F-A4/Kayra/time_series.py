@@ -70,10 +70,10 @@ def stage_three(input_filename, output_filename):
             - R (Recovered, récupéré(e))  
             - D (Dead, mort(e))
     Return a dictionary, where:
-        - the keys are each day of the pandemic (integer)
+        - the keys are each day of the pandemic (int)
         - the values are a dictionary, where:
-            - the keys are the state
-            - the values are number of people in that state that day
+            - the keys are the state (string)
+            - the values are number of people in that state that day (int)
     >>> stage_three('example_2.tsv', 'example_3.tsv')
     {0: {'I': 1, 'D': 0, 'R': 0}, 1: {'I': 2, 'D': 1, 'R': 0}}
     >>> stage_three('260837168_2.tsv', '260837168_3.tsv')
