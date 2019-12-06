@@ -17,11 +17,11 @@ def date_diff(date1, date2):
     Note that date can be positive/negative:
     - if the first date is earlier than the second date, the number should be positive;
     - if the second date is earlier than the first date, the number should be positive;
-    >>> date_diff('2019-10-31', '2019-11-2') 
-    2
-    >>> date_diff('2019-10-31', '2015-11-2') 
+    >>> date_diff('2019-10-29', '2019-11-2') 
+    4
+    >>> date_diff('2019-8-30', '2015-9-1') 
     -1459
-    >>> date_diff('2020-4-1', '2020-4-26') 
+    >>> date_diff('2021-5-1', '2021-5-26') 
     25
     '''
 
@@ -44,11 +44,11 @@ def get_age(date1, date2):
     Note that date can be positive/negative:
     - if the first date is earlier than the second date, the number should be positive;
     - if the second date is earlier than the first date, the number should be positive;
-    >>> get_age('2019-10-31', '2019-11-2') 
+    >>> get_age('1970-10-31', '1970-11-2') 
     0
-    >>> get_age('2019-10-31', '2015-11-2') 
+    >>> get_age('2020-10-31', '2016-11-2') 
     -3
-    >>> get_age('2019-4-1', '2020-4-26') 
+    >>> get_age('2018-4-1', '2019-4-26') 
     1
     '''
 
@@ -64,9 +64,8 @@ def stage_three(input_filename, output_filename):
     '''
     (str, str) -> ( (str, int) dict ) dict
 
-    First, determine the index date: the first date in the first line of the file (2022-11-28 in our
-    running example)
-    The changes to make to the data:
+    Given the index date, 
+
         1. Replace the date of each record with the date_diff of that date and the index date
         2. Replace the date of birth with age at the time of the index date
         3. Replace the status with one of I, R and D. (Representing Infected, Recovered, and Dead;
@@ -75,6 +74,9 @@ def stage_three(input_filename, output_filename):
     Return: a dictionary. The keys are each day of the pandemic (integer). The values are a
     dictionary, with how many people are in each state on that day. Example:
 
+    >>> stage_three('example_2.tsv', 'example_3.tsv')
+    {0: {'I': 1, 'R': 0, 'D': 0}, 1: {'I': 2, 'R': 0, 'D': 1}}
+        
     '''
     
     #helper function to clean up status
@@ -149,10 +151,18 @@ def plot_time_series(d):
         result.append(convert_to_list_of_lists(subdict))
     
     fig, ax = plt.subplots()
+    
+    infected = []
+    recovered = []
+    dead = []
+    for sublist in result:
+        infected.append(sublist[0])
+        recovered.append(sublist[1])
+        dead.append(sublist[2])
    
-    ax.plot(range(len(result)), [sublist[0] for sublist in result])
-    ax.plot(range(len(result)), [sublist[1] for sublist in result])
-    ax.plot(range(len(result)),[sublist[2] for sublist in result])
+    ax.plot(range(len(result)), infected)
+    ax.plot(range(len(result)), recovered)
+    ax.plot(range(len(result)), dead)
     
     plt.legend(('Infected', 'Recovered', 'Dead'))
     ax.set(title='Time series of early pandemic', xlabel = "Days into Pandemic", ylabel = "Number of People" )
