@@ -128,46 +128,6 @@ def stage_four(input_filename, output_filename):
     return patient_dict
 
 
-def fatality_by_age(patient_dict):
-
-    def round_nearest5(x, base=5):
-        return base * round(x/base)
-    
-    # {age: [deaths, recoveries]}
-    print(patient_dict)
-    prob_fatality = {}
-    for key, value in sorted(patient_dict.items()):
-        round_age = round_nearest5(value.age)
-
-        if round_age in prob_fatality:
-            print('same age:', round_age)
-            if value.state == 'R':
-                prob_fatality[round_age] = [prob_fatality[round_age][0], prob_fatality[round_age][1] + 1]
-            if value.state == 'D':
-                prob_fatality[round_age] = [prob_fatality[round_age][0] + 1, prob_fatality[round_age][1]]
-        else:
-            print('diff age:', round_age)
-            if value.state == 'R':
-                prob_fatality[round_age] = [0, 1]
-            if value.state == 'D':
-                prob_fatality[round_age] = [1, 0]
-            print()
-
-    # print(prob_fatality)
-    age = []
-    probability = []
-    for key, value in sorted(prob_fatality.items()):
-        age.append(key)
-        probability.append(value[0]/(value[0]+value[1]))
-    plt.plot(age, probability)
-    plt.ylim((0, 1.2))
-    plt.xlabel('Age')
-    plt.ylabel('Deaths / (Deaths+Recoveries)')
-    plt.title('Probability of death vs age')
-    plt.savefig('fatality_by_age.png')
-
-    return probability
-
 
 if __name__ == '__main__':
     doctest.testmod()
