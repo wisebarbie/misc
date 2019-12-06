@@ -153,5 +153,55 @@ def stage_four(input_filename, output_filename):
     return patient_dict
 
 
+def fatality_by_age(patient_dict):
+    '''
+    dict -> list
+    Plot age vs. fatality_by_age and save as .png file.
+    Return a list probabilites of death by age group.
+    >>> p = stage_four('260837168_3.tsv', '260837168_4.tsv')
+    >>> fatality_by_age(p)
+    [1.0, 1.0, 1.0, 1.0, 0.8571428571428571, 1.0, 0.8947368421052632, 1.0, 0.875, 1.0, 0.875, 0.9166666666666666, 1.0, 0.9166666666666666, 1.0, 1.0, 1.0, 1.0, 1.0, 0]
+    '''
+    # helper function to round the nearest five
+    def round_to_five(num):
+        return round(num/5.0) * 5
+    # helper function for sorting
+    def sort_by_age(tuple):
+        return tuple[0]
+    # initialize dictionary to track dead/recovered per age group of five years
+    status_dict_by_age = {}
+    for i in range(20):
+        status_dict_by_age[5*i] = {'D': 0, 'R': 0} 
+    # update...
+    for patient in patient_dict.values():
+        if patient.state != 'I':
+            status_dict_by_age[round_to_five(patient.age)][patient.state] += 1.0
+    # update...
+    age_probs = []
+    for age, counts in status_dict_by_age.items():
+        if counts['D'] + counts['R'] > 0:
+            prob = counts['D'] / (counts['D'] + counts['R'])
+        else:
+            prob = 0
+        age_probs.append((age, prob))
+    # sort by age group
+    age_probs.sort(key=sort_by_age) 
+    # create lists for plot
+    age_list = [age for age, prob in age_probs]
+    prob_list = [prob for age, prob in age_probs]
+    # plot points per status
+    plt.plot(age_list, prob_list)
+    # add title, axis labels
+    plt.title('Probabilty of death vs age, by Kayra Aker')
+    plt.xlabel('Age')
+    plt.ylabel('Deaths / (Deaths+Recoveries)')
+    # fix axis range
+    plt.ylim((0, 1.2))
+    # save figure
+    plt.savefig('fatality_by_age.png')
+    # return list in desired format
+    return prob_list
+
+
 if __name__ == '__main__':
     doctest.testmod()
