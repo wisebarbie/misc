@@ -177,18 +177,14 @@ def fatality_by_age(patient_dict):
         if patient.state != 'I':
             status_dict_by_age[round_to_five(patient.age)][patient.state] += 1.0
     # update...
-    age_probs = []
-    for age, counts in status_dict_by_age.items():
+    age_list = []
+    prob_list = []
+    for age, counts in sorted(status_dict_by_age.items()):
+        prob = 0
         if counts['D'] + counts['R'] > 0:
             prob = counts['D'] / (counts['D'] + counts['R'])
-        else:
-            prob = 0
-        age_probs.append((age, prob))
-    # sort by age group
-    age_probs.sort(key=sort_by_age) 
-    # create lists for plot
-    age_list = [age for age, prob in age_probs]
-    prob_list = [prob for age, prob in age_probs]
+        age_list.append(age)
+        prob_list.append(prob)
     # plot points per status
     plt.plot(age_list, prob_list)
     # add title, axis labels
