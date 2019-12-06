@@ -76,6 +76,8 @@ def stage_three(input_filename, output_filename):
             - the values are number of people in that state that day
     >>> stage_three('stage2.tsv', 'stage3.tsv')
     {0: {'I': 1, 'D': 0, 'R': 0}, 1: {'I': 2, 'D': 1, 'R': 0}}
+    >>> stage_three('260837168_2.tsv', '260837168_3.tsv')
+    {0: {'I': 1, 'D': 0, 'R': 0}, 1: {'I': 3, 'D': 0, 'R': 0}, 2: {'I': 7, 'D': 0, 'R': 0}, 3: {'I': 14, 'D': 2, 'R': 0}, 4: {'I': 28, 'D': 6, 'R': 0}, 5: {'I': 67, 'D': 4, 'R': 0}, 6: {'I': 146, 'D': 16, 'R': 0}, 7: {'I': 333, 'D': 20, 'R': 1}, 8: {'I': 736, 'D': 49, 'R': 4}, 9: {'I': 1454, 'D': 105, 'R': 4}}
     '''
     # open relevant files
     input_file = open(input_filename, 'r', encoding='utf-8')
@@ -121,6 +123,9 @@ def plot_time_series(day_dict):
     >>> day_dict = stage_three('stage2.tsv', 'stage3.tsv')
     >>> plot_time_series(day_dict)
     [[1, 0, 0], [2, 0, 1]]
+    >>> day_dict = stage_three('260837168_2.tsv', '260837168_3.tsv')
+    >>> plot_time_series(day_dict)
+    [[1, 0, 0], [3, 0, 0], [7, 0, 0], [14, 0, 2], [28, 0, 6], [67, 0, 4], [146, 0, 16], [333, 1, 20], [736, 4, 49], [1454, 4, 105]]
     '''
     # initialize variables
     day_list = []
