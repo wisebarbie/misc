@@ -48,6 +48,8 @@ def stage_one(input_filename, output_filename):
     Return the number of lines written to output_filename
     >>> stage_one('example.txt', 'stage1.tsv')
     4
+    >>> stage_one('260837168.txt', '260837168_1.tsv')
+    3000
     '''
     # open relevant files
     input_file = open(input_filename, 'r', encoding='utf-8')
@@ -90,6 +92,8 @@ def stage_two(input_filename, output_filename):
     Return the number of lines written to output_filename
     >>> stage_two('stage1.tsv', 'stage2.tsv')
     4
+    >>> stage_two('260837168_1.tsv', '260837168_2.tsv')
+    3000
     '''
     # open relevant files
     input_file = open(input_filename, 'r', encoding='utf-8')
@@ -100,9 +104,20 @@ def stage_two(input_filename, output_filename):
     line_count = 0
     # do for all lines
     for line in input_lines:
+        # standardize 'N.A.' to avoid over splitting
+        line = line.replace('NON APPLICABLE', 'N.A.').replace('NON\tAPPLICABLE', 'N.A.')
+        line = line.replace('NOT APPLICABLE', 'N.A.').replace('NOT\tAPPLICABLE', 'N.A.')
+        line = line.replace('N/A', 'N.A.')
         # split line by delimiter into list
         line_list = line.split('\t')
-        # make changes if there are more than 9 columns
+        # ensure postal code is in the correct format
+        line_list[5] = line_list[5].replace(' ', '')
+        if any(char.isdigit() for char in line_list[6]):
+            new_list = line_list[:5]
+            new_list.append(line_list[5] + line_list[6])
+            new_list.extend(line_list[7:])
+            line_list = new_list
+        # ensure temperature is in the correct format
         if len(line_list) > 9:
             temperature_list = line_list[7:-1]
             temperature = temperature_list[0]
@@ -111,7 +126,11 @@ def stage_two(input_filename, output_filename):
                     temperature = temperature + '.' + temperature_list[i].replace(' ', '')
                 else:
                     temperature = temperature + temperature_list[i].replace(' ', '')
-            line = '\t'.join(line_list[:7]) + '\t' + temperature + '\t' + line_list[-1]
+            new_list = line_list[:7]
+            new_list.append(temperature)
+            new_list.append(line_list[-1])
+            line_list = new_list
+        line = '\t'.join(line_list)
         # write line to output_filename and increment line count
         output_file.write(line)
         line_count += 1 
