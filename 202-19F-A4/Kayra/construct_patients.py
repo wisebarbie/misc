@@ -13,13 +13,13 @@ class Patient:
     '''
     Define new class.
     >>> p = Patient('0', '0', '42', 'Woman', 'H3Z2B5', 'I', '102.2', '12')
-    >>> str(p) == '0\\t42\\tF\\tH3Z\\t0\\tI\\t12\\t39.0'
-    True
+    >>> str(p)
+    '0\\t42\\tF\\tH3Z\\t0\\tI\\t12\\t39.0'
     >>> p = Patient('0', '0', '42', 'Woman', 'H3Z2B5', 'I', '102.2', '12')
     >>> p1 = Patient('0', '1', '42', 'F', 'H3Z', 'I', '40,0 C', '13')
     >>> p.update(p1)
-    >>> str(p) == '0\\t42\\tF\\tH3Z\\t0\\tI\\t13\\t39.0;40.0'
-    True
+    >>> str(p)
+    '0\\t42\\tF\\tH3Z\\t0\\tI\\t13\\t39.0;40.0'
     '''
     def __init__(self, num, day_diagnosed, age, sex_gender, postal, state, temps, days_symptomatic):
         # number of the patient (int)
@@ -40,21 +40,24 @@ class Patient:
         self.days_symptomatic = int(days_symptomatic)
 
     def assign_gender(self, sex_gender):
-        gender = sex_gender[0].upper()
-        gender_dict = {'M': 'MHB', 'F': 'FWG'}
+        sex_gender = sex_gender.upper()
+        gender_dict = {
+            'M': ['M','MALE','H','HOMME','MAN','BOY'], 
+            'F': ['F','FEMALE','FEMME','WOMAN','GIRL']
+        }
         for key, options in gender_dict.items():
-            if gender in options:
+            if sex_gender in options:
                 return key
         return 'X'
 
     def assign_postal(self, postal):
-        # if len(postal) < 3 or postal == 'N.A.':
-        #     return '000'
-        if postal[0] == 'H' and postal[1].isdigit() and postal[2].isalpha():
+        if len(postal) >= 3 and postal[0] == 'H' and postal[1].isdigit() and postal[2].isalpha():
             return postal[:3]
         return '000'
 
     def assign_temps(self, temps):
+        if temps == 'N.A.':
+            return 0
         temps = temps.replace(',', '.').replace('°', '').replace(' ', '')
         new = ''
         for letter in temps:
@@ -93,10 +96,32 @@ class Patient:
             self.temps.append(patient.temps[0])
         # otherwise raise error
         else:
-            raise AssertionError("Number, gender and postal code of patient must match.")
+            print(patient.num, self.num)
+            print(patient.sex_gender, self.sex_gender)
+            #raise AssertionError("Number, gender and postal code of patient must match.")
 
 
 def stage_four(input_filename, output_filename):
+    '''
+    (str, str) -> dict
+    Read input_filename.
+    Create a new Patient object for each line.
+    Keep and return a dictionary, where:
+        - the keys are the patient's number (int)
+        - the values are the Patient objects
+    Update the Patient object for existing entires rather than overwriting it.
+    Write to output_filename, every Patient converted to a string, sorted by patient number.
+    >>> p = stage_four('example_3.tsv', 'example_4.tsv')
+    >>> len(p)
+    3
+    >>> str(p[0])
+    '0\\t42\\tF\\tH3Z\\t0\\tI\\t4\\t40.0;39.13'
+    >>> p = stage_four('260837168_3.tsv', '260837168_4.tsv')
+    >>> len(p)
+    1725
+    >>> str(p[0])
+    '0\\t20\\tM\\tH3C\\t0\\tI\\t10\\t38.4;38.0;37.1;38.0;35.0;34.26;36.45;34.7;34.6;37.35'
+    '''
     # open relevant files
     input_file = open(input_filename, 'r', encoding='utf-8')
     output_file = open(output_filename, 'w', encoding='utf-8')
@@ -114,10 +139,10 @@ def stage_four(input_filename, output_filename):
             line_list[5], line_list[6], line_list[7], line_list[8]
         )
         # update patient dictionary
-        if line_list[1] in patient_dict:
-            patient_dict[line_list[1]].update(new_patient)
+        if int(line_list[1]) in patient_dict:
+            patient_dict[int(line_list[1])].update(new_patient)
         else:
-            patient_dict[line_list[1]] = new_patient
+            patient_dict[int(line_list[1])] = new_patient
     # write contents of patient dictionary into output_filename
     for _, value in sorted(patient_dict.items()):
         output_file.write(str(value) + '\n')
@@ -126,7 +151,6 @@ def stage_four(input_filename, output_filename):
     output_file.close()
     # return patient dictionary
     return patient_dict
-
 
 
 if __name__ == '__main__':
