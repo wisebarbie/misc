@@ -118,6 +118,7 @@ def stage_three(input_filename, output_filename):
 def plot_time_series(day_dict):
     '''
     dict -> list
+    Plot a time series and save as .png file.
     Return a list of lists, where each sublist represents each day of the pandemic 
     i.e. [how many people infected, how many people recovered, how many people dead]
     >>> day_dict = stage_three('example_2.tsv', 'example_3.tsv')
