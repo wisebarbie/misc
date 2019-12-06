@@ -128,12 +128,12 @@ def plot_time_series(day_dict):
     >>> plot_time_series(day_dict)
     [[1, 0, 0], [3, 0, 0], [7, 0, 0], [14, 0, 2], [28, 0, 6], [67, 0, 4], [146, 0, 16], [333, 1, 20], [736, 4, 49], [1454, 4, 105]]
     '''
-    # initialize variables
+    # initialize empty lists to save data points
     day_list = []
     I = []
     R = []
     D = []
-    # do for every (key, value) pair in dictionary
+    # append data point for every (key, value) pair in sorted dictionary
     for _, status_dict in sorted(day_dict.items()):
         I.append(status_dict['I'])
         R.append(status_dict['R'])
