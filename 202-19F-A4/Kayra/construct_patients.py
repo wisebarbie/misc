@@ -162,23 +162,18 @@ def fatality_by_age(patient_dict):
     >>> fatality_by_age(p)
     [1.0, 1.0, 1.0, 1.0, 0.8571428571428571, 1.0, 0.8947368421052632, 1.0, 0.875, 1.0, 0.875, 0.9166666666666666, 1.0, 0.9166666666666666, 1.0, 1.0, 1.0, 1.0, 1.0, 0]
     '''
-    # helper function to round the nearest five
-    def round_to_five(num):
-        return round(num/5.0) * 5
-    # helper function for sorting
-    def sort_by_age(tuple):
-        return tuple[0]
     # initialize dictionary to track dead/recovered per age group of five years
     status_dict_by_age = {}
     for i in range(20):
         status_dict_by_age[5*i] = {'D': 0, 'R': 0} 
-    # update...
+    # track dead/recovered per age group of five years
     for patient in patient_dict.values():
         if patient.state != 'I':
-            status_dict_by_age[round_to_five(patient.age)][patient.state] += 1.0
-    # update...
+            status_dict_by_age[round(patient.age/5.0) * 5][patient.state] += 1.0
+    # initialize empty lists to save data points
     age_list = []
     prob_list = []
+    # append data point for every (key, value) pair in sorted dictionary
     for age, counts in sorted(status_dict_by_age.items()):
         prob = 0
         if counts['D'] + counts['R'] > 0:
