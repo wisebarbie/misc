@@ -74,9 +74,8 @@ def stage_three(input_filename, output_filename):
     Return: a dictionary. The keys are each day of the pandemic (integer). The values are a
     dictionary, with how many people are in each state on that day. Example:
 
-    >>> stage_three('example_2.tsv', 'example_3.tsv')
-    {0: {'I': 1, 'R': 0, 'D': 0}, 1: {'I': 2, 'R': 0, 'D': 1}}
-        
+    >>> stage_three('260823566_2.tsv', '260823566_3.tsv')
+    {0: {'I': 1, 'R': 0, 'D': 0}, 1: {'I': 3, 'R': 0, 'D': 0}, 2: {'I': 7, 'R': 0, 'D': 1}, 3: {'I': 17, 'R': 0, 'D': 2}, 4: {'I': 42, 'R': 0, 'D': 3}, 5: {'I': 97, 'R': 0, 'D': 12}, 6: {'I': 231, 'R': 0, 'D': 27}, 7: {'I': 563, 'R': 0, 'D': 53}, 8: {'I': 1109, 'R': 2, 'D': 374}, 9: {'I': 414, 'R': 1, 'D': 41}}
     '''
     
     #helper function to clean up status
@@ -140,6 +139,9 @@ def stage_three(input_filename, output_filename):
 def plot_time_series(d):
     '''
     d : ( (str, int) dict ) dict -> (int list) list
+    >>> plot = stage_three('260823566_2.tsv', '260823566_3.tsv')
+    >>> plot_time_series(plot)
+    [[1, 0, 0], [3, 0, 0], [7, 0, 1], [17, 0, 2], [42, 0, 3], [97, 0, 12], [231, 0, 27], [563, 0, 53], [1109, 2, 374], [414, 1, 41]]
 
     '''
     def convert_to_list_of_lists(sd):
