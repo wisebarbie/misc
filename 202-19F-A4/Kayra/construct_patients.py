@@ -96,5 +96,78 @@ class Patient:
             raise AssertionError("Number, gender and postal code of patient must match.")
 
 
+def stage_four(input_filename, output_filename):
+    # open relevant files
+    input_file = open(input_filename, 'r', encoding='utf-8')
+    output_file = open(output_filename, 'w', encoding='utf-8')
+    # store lines from input_filename as a list
+    input_lines = input_file.readlines()
+    # initialize dictionary
+    patient_dict = {}
+    # do for all lines
+    for line in input_lines:
+        # split line by delimiter into list
+        line_list = line.split('\t')
+        # create new patient object
+        new_patient = Patient(
+            line_list[1], line_list[2], line_list[3], line_list[4], 
+            line_list[5], line_list[6], line_list[7], line_list[8]
+        )
+        # update patient dictionary
+        if line_list[1] in patient_dict:
+            patient_dict[line_list[1]].update(new_patient)
+        else:
+            patient_dict[line_list[1]] = new_patient
+    # write contents of patient dictionary into output_filename
+    for _, value in sorted(patient_dict.items()):
+        output_file.write(str(value) + '\n')
+    # close relevant files
+    input_file.close()
+    output_file.close()
+    # return patient dictionary
+    return patient_dict
+
+
+def fatality_by_age(patient_dict):
+
+    def round_nearest5(x, base=5):
+        return base * round(x/base)
+    
+    # {age: [deaths, recoveries]}
+    print(patient_dict)
+    prob_fatality = {}
+    for key, value in sorted(patient_dict.items()):
+        round_age = round_nearest5(value.age)
+
+        if round_age in prob_fatality:
+            print('same age:', round_age)
+            if value.state == 'R':
+                prob_fatality[round_age] = [prob_fatality[round_age][0], prob_fatality[round_age][1] + 1]
+            if value.state == 'D':
+                prob_fatality[round_age] = [prob_fatality[round_age][0] + 1, prob_fatality[round_age][1]]
+        else:
+            print('diff age:', round_age)
+            if value.state == 'R':
+                prob_fatality[round_age] = [0, 1]
+            if value.state == 'D':
+                prob_fatality[round_age] = [1, 0]
+            print()
+
+    # print(prob_fatality)
+    age = []
+    probability = []
+    for key, value in sorted(prob_fatality.items()):
+        age.append(key)
+        probability.append(value[0]/(value[0]+value[1]))
+    plt.plot(age, probability)
+    plt.ylim((0, 1.2))
+    plt.xlabel('Age')
+    plt.ylabel('Deaths / (Deaths+Recoveries)')
+    plt.title('Probability of death vs age')
+    plt.savefig('fatality_by_age.png')
+
+    return probability
+
+
 if __name__ == '__main__':
     doctest.testmod()

@@ -106,6 +106,9 @@ def stage_three(input_filename, output_filename):
         line = '\t'.join(line_list)
         # write line to output_filename
         output_file.write(line)
+    # close relevant files
+    input_file.close()
+    output_file.close()
     # return dictionary in desired format
     return day_dict
 
