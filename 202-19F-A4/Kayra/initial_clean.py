@@ -46,7 +46,7 @@ def stage_one(input_filename, output_filename):
         2. Change all text to be upper case
         3. Change any / or . in the dates to hyphens (-) 
     Return the number of lines written to output_filename
-    >>> stage_one('example.txt', 'stage1.tsv')
+    >>> stage_one('example.txt', 'example_1.tsv')
     4
     >>> stage_one('260837168.txt', '260837168_1.tsv')
     3000
@@ -90,7 +90,7 @@ def stage_two(input_filename, output_filename):
         1. All lines should have 9 clean columns
         2. Any lines with more than 9 columns should be cleaned so that the line has 9 columns. 
     Return the number of lines written to output_filename
-    >>> stage_two('stage1.tsv', 'stage2.tsv')
+    >>> stage_two('example_1.tsv', 'example_2.tsv')
     4
     >>> stage_two('260837168_1.tsv', '260837168_2.tsv')
     3000
