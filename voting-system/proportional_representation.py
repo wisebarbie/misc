@@ -1,10 +1,5 @@
-# COMP 202 A3
-# Name:
-# Student ID
-
 from instant_run_off import *
 
-################################################################################
 
 def irv_to_stv_ballot(ballots, num_winners):
     '''
@@ -19,9 +14,6 @@ def irv_to_stv_ballot(ballots, num_winners):
                 sublist.append(party+str(i))
         output.append(sublist)
     return output    
-
-
-################################################################################
 
 
 def eliminate_n_ballots_for(ballots, to_eliminate, n):
@@ -54,7 +46,6 @@ def eliminate_n_ballots_for(ballots, to_eliminate, n):
         else:
             elims += 1
     return new_ballots
-
 
 
 def stv_vote_results(ballots, num_winners):
@@ -114,9 +105,6 @@ def stv_vote_results(ballots, num_winners):
     return final_output
 
 
-################################################################################
-
-
 def count_stv(ballots, num_winners):
     '''
     >>> random.seed(3) # make the random tie-break consistent
@@ -136,9 +124,6 @@ def count_stv(ballots, num_winners):
             if party in candidate and count >= quota:
                 parties[party] += 1
     return parties
-
-
-################################################################################
 
 
 def count_SL(results, num_winners):
@@ -166,9 +151,6 @@ def count_SL(results, num_winners):
         S[result[0][0]] += 1
         winners_taken -= 1
     return S
-
-
-################################################################################
 
 
 if __name__ == '__main__':

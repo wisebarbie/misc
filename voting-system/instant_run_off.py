@@ -1,10 +1,5 @@
-# COMP 202 A3
-# Name: Shaista Asmi 
-# Student ID: 260682464
-
 from single_winner import *
 
-################################################################################
 
 def votes_needed_to_win(ballots, num_winners):
     # note total votes as number of elements in the list ballots
@@ -26,9 +21,6 @@ def has_votes_needed(result, votes_needed):
     return False
     
 
-################################################################################
-
-
 def eliminate_candidate(ballots, to_eliminate):
     '''
     >>> eliminate_candidate([['NDP', 'LIBERAL'], ['GREEN', 'NDP'], ['NDP', 'BLOC']], ['NDP', 'LIBERAL'])
@@ -44,9 +36,6 @@ def eliminate_candidate(ballots, to_eliminate):
         # append changed ballot into new list of ballots
         output.append(new_ballot)
     return output
-
-
-################################################################################
 
 
 def count_irv(ballots):
@@ -68,8 +57,6 @@ def count_irv(ballots):
         product[sorted_key] = add_dicts(other_ballots, first_choice_votes)[sorted_key]
     return product
     
-
-################################################################################
-
+    
 if __name__ == '__main__':
     doctest.testmod()

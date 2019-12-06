@@ -1,9 +1,8 @@
 from proportional_representation import *
 
+
 SHORTHANDS = {'G':'GREEN', 'N':'NDP', 'L':'LIBERAL', 'C':'CPC', 'B':'BLOC',
               'P':'PPC', 'I':'IND'}
-
-################################################################################
 
 
 def process_to_string(raw):
@@ -40,8 +39,6 @@ def process_to_dict(raw):
     return d
 
 
-################################################################################
-
 def read_votes(fname):
     '''(str) -> dict
     Read in a file of voters and all their possible ballots.
@@ -65,9 +62,6 @@ def read_votes(fname):
                                     approval_ballot, rated_ballot, ranked_ballot]
 
     return electorate
-
-
-################################################################################
 
 
 def votes_for_riding(electorate, riding_id, ballot_type):
@@ -135,7 +129,6 @@ def get_ridings(electorate, counting_function):
 
     return ridings
 
-################################################################################
 
 if __name__ == '__main__':
     doctest.testmod()

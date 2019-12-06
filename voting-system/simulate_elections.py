@@ -1,14 +1,10 @@
-# COMP 202 A3
 NAME = 'SHAISTA'
 
-################################### Do not edit anything below this ############
 
 from read_votes import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-################################################################################
 
 def outcome(seats):
     '''(dict) -> str
@@ -30,9 +26,6 @@ def outcome(seats):
     else:
         winner += ' Minority'
     return winner
-
-
-################################################################################
 
 
 def get_popular_vote(electorate):
@@ -91,9 +84,6 @@ def single_winner_HOC(electorate, counting_function):
     return seats
 
 
-################################################################################
-
-
 def multi_winner_HOC(electorate, counting_function):
     '''(dict, function) -> dict
     Given an electorate dictionary and multi-winner voting system function,
@@ -150,9 +140,6 @@ def get_seats(electorate, counting_function, multi_winner = False):
         return single_winner_HOC(electorate, counting_function)
 
 
-################################################################################
-
-
 def plot_party_results(grid_list, plot_name, show_graph = True):
     '''(lst, str) -> np.array
     Given a matrix in list form, plot it as bar plot.
@@ -197,9 +184,6 @@ def plot_party_results(grid_list, plot_name, show_graph = True):
     return seats
 
 
-################################################################################
-
-
 def simulate():
     print('Simulating elections with different systems!')
     print('This could take 1-5 mins to run.')
@@ -234,8 +218,6 @@ def simulate():
     print(a)
     print('See visualization in HOC.png!')
 
-
-################################################################################
 
 if __name__ == '__main__':
     # doctest.testmod()

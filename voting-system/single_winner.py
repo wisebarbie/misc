@@ -1,7 +1,3 @@
-# COMP 202 A3
-# Name: Shaista Asmi 
-# Student ID: 260682464
-
 from a3_helpers import *
 
 

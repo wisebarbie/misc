@@ -1,9 +1,6 @@
-# COMP 202 A3 Part 1
-# Name: Shaista Asmi
-# Student ID: 260682464
-
 import doctest
 import random
+
 
 def flatten_lists(nested):
     '''
@@ -21,6 +18,7 @@ def flatten_lists(nested):
             output.append(maybe_list)
     return output 
 
+
 def flatten_dict(d):
     '''
     >>> flatten_dict({'LIBERAL': 5, 'NDP':2})
@@ -31,6 +29,7 @@ def flatten_dict(d):
         for i in range(d[key]):
             output.append(key)
     return output
+
 
 def add_dicts(d1, d2):
     '''
@@ -46,6 +45,7 @@ def add_dicts(d1, d2):
         else:
             d[key] = d2[key]
     return d
+
 
 def get_all_candidates(ballots):
     '''
@@ -66,8 +66,6 @@ def get_all_candidates(ballots):
             output.append(candidate)
     return output
 
-
-###################################################### winner/loser
 
 def get_candidate_by_place(result, func):
     '''
@@ -109,8 +107,6 @@ def last_place(result, seed = None):
     '''
     return get_candidate_by_place(result, min)
 
-
-###################################################### testing help
 
 def pr_dict(d):
     '''(dict) -> None
