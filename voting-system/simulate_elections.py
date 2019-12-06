@@ -1,6 +1,3 @@
-NAME = 'SHAISTA'
-
-
 from read_votes import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -172,7 +169,7 @@ def plot_party_results(grid_list, plot_name, show_graph = True):
 
     plt.xlabel('Voting System')
     plt.ylabel('Number of Seats')
-    plt.title('Seats in Simulated Election (with popular vote for comparison)\nWith Code By: ' + NAME)
+    plt.title('Seats in Simulated Election (with popular vote for comparison)')
 
     # More things to share
     plt.xticks(row_ind + 0.0, ('PopVote', 'Plurality', 'Approval', 'Score', 'IRV', 'STV', 'SL'))
